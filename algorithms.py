@@ -86,8 +86,75 @@ def run_bfs(draw, grid, start, end, clock, speed):
 
 
 #Dijkstra
-def run_dijkstra(draw, grid, start, end, clock, speed):
-    raise NotImplementedError
+def run_dijkstra(draw_callback, grid, start, end, clock=None, speed=120):
+    count = 0
+    pq = [(0, count, start)]
+    distances = {start: 0}
+    came_from = {}
+    visited = set()
+
+    expanded_count = 0
+    found = False
+    compute_time = 0.0
+
+    while pq:
+        t0 = time.perf_counter()
+        current_dist, _, current = heapq.heappop(pq)
+
+        if current in visited:
+            compute_time += time.perf_counter() - t0
+            continue
+
+        visited.add(current)
+        expanded_count += 1
+
+        if current == end:
+            found = True
+            compute_time += time.perf_counter() - t0
+            break
+
+        for neighbor in current.neighbors:
+            if neighbor in visited:
+                continue
+
+            new_dist = current_dist + 1
+            if new_dist < distances.get(neighbor, float("inf")):
+                distances[neighbor] = new_dist
+                came_from[neighbor] = current
+                count += 1
+                heapq.heappush(pq, (new_dist, count, neighbor))
+
+                if draw_callback and neighbor != end:
+                    neighbor.make_open()
+
+        if draw_callback and current != start:
+            current.make_closed()
+
+        compute_time += time.perf_counter() - t0
+
+        if draw_callback:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            draw_callback()
+            if clock:
+                clock.tick(speed)
+
+    path_len = 0
+    if found:
+        curr = end
+        while curr in came_from:
+            curr = came_from[curr]
+            path_len += 1
+            if draw_callback and curr != start:
+                curr.make_path()
+                draw_callback()
+                if clock:
+                    clock.tick(speed)
+
+    elapsed_ms = compute_time * 1000
+    return found, elapsed_ms, expanded_count, path_len
 
 
 #A* Standar
