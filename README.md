@@ -48,6 +48,6 @@ Program dapat dioperasikan penuh menggunakan **klik mouse pada panel kanan** ata
   - `Klik Kanan` : Menghapus sel kembali menjadi jalan.
 
 - **Tombol Eksekusi:**
-  - `▶ Visualisasi (SPACE)` : Memulai pencarian animasi langkah demi langkah.
-  - `⚡ Benchmark 30x (B)` : Menjalankan pengujian 30x instan tanpa rendering, hasilnya langsung tersusun di tabel panel.
-  - `🔄 Reset (C)` : Membersihkan rute visual / reset pencarian.
+  - `Visualisasi (SPACE)` : Memulai pencarian animasi langkah demi langkah.
+  - `Benchmark 30x (B)` : Menjalankan pengujian 30x instan tanpa rendering, hasilnya langsung tersusun di tabel panel.
+  - `Reset (C)` : Membersihkan rute visual / reset pencarian.
