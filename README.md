@@ -23,11 +23,6 @@ Proyek visualisasi dan komparasi algoritma pencarian jalur terpendek (Breadth-Fi
 py main.py
 ```
 
-## Menjalankan di Google Colab
-1. Buka [Google Colab](https://colab.research.google.com).
-2. Pilih tab **Upload** -> pilih berkas `Tubes_PKA_A4_GoogleColab.ipynb`.
-3. Jalankan menu **Runtime -> Run all** (`Ctrl+F9`). Seluruh visualisasi grid, tabel rekapitulasi, dan grafik performa `.png` akan ter-generate otomatis.
-
 ## Kontrol Interaktif Pygame (Mouse & Keyboard)
 Program dapat dioperasikan penuh menggunakan **klik mouse pada panel kanan** atau menggunakan **keyboard shortcut**:
 
