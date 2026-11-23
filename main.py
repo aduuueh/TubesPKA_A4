@@ -26,7 +26,7 @@ GRID_VIEW_MARGIN = 10
 PANEL_X = GRID_AREA_SIZE + GRID_VIEW_MARGIN * 2
 PANEL_WIDTH = 430
 WINDOW_WIDTH = PANEL_X + PANEL_WIDTH
-WINDOW_HEIGHT = 630
+WINDOW_HEIGHT = 660
 
 # Palet warna sesuai dokumen Proposal Bab 3.1.2
 COLOR_ROAD = (24, 64, 36)          # a. Hijau tua: sel jalan
@@ -187,9 +187,9 @@ def draw_panel(win, font, font_bold, font_small, state, buttons):
     win.blit(font_bold.render("TUBES PKA - KELOMPOK A4", True, COLOR_TEXT_ACCENT), (x, y))
     y += 16
     win.blit(font_small.render("Komparasi BFS, Dijkstra, A* Std & A* Tie-Break", True, COLOR_TEXT_MUTED), (x, y))
-    y += 15
+    y += 14
     pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
-    y += 6
+    y += 5
 
     # 2. Tombol Pilihan Skenario
     win.blit(font_bold.render("PILIH SKENARIO PENGUJIAN (Klik):", True, COLOR_TEXT_WARN), (x, y))
@@ -207,9 +207,9 @@ def draw_panel(win, font, font_bold, font_small, state, buttons):
         is_active = (state['scenario'] == sc_id)
         draw_button(win, font_small, rect, sc_labels[sc_id], active=is_active)
 
-    y = 118
+    y = 117
     pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
-    y += 6
+    y += 5
 
     # 3. Pilihan Algoritma
     win.blit(font_bold.render("PILIH ALGORITMA (Klik / Tombol 1-4):", True, COLOR_TEXT_ACCENT), (x, y))
@@ -219,16 +219,16 @@ def draw_panel(win, font, font_bold, font_small, state, buttons):
         'BFS': "1. BFS",
         'Dijkstra': "2. Dijkstra",
         'A* Standar': "3. A* Standar",
-        'A* Tie-Break': "4. A* Tie-Break (Usulan)"
+        'A* Tie-Break': "4. A* Tie-Break"
     }
     for algo_key, rect in buttons['algo'].items():
         draw_button(win, font_small, rect, algo_labels[algo_key], active=(state['algo'] == algo_key))
 
-    y = 192
+    y = 189
     pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
-    y += 6
+    y += 5
 
-    # 4. Mode Edit & Aksi
+    # 4. Mode Edit & Aksi (Tata Letak Rapi Tanpa Teks Terpotong)
     win.blit(font_bold.render("MODE EDIT & AKSI:", True, COLOR_TEXT_ACCENT), (x, y))
     y += 18
 
@@ -236,63 +236,78 @@ def draw_panel(win, font, font_bold, font_small, state, buttons):
     draw_button(win, font_small, buttons['mode']['G'], "[G] Goal", active=(state['mode'] == 'G'))
     draw_button(win, font_small, buttons['mode']['O'], "[O] Dinding", active=(state['mode'] == 'O'))
 
-    y = 242
-    draw_button(win, font_bold, buttons['actions']['visualize'], "▶ Visualisasi (SPACE)", color_override=(20, 75, 40), border_color_override=(46, 213, 115))
+    draw_button(win, font_bold, buttons['actions']['visualize'], "▶ Visualisasi Langkah demi Langkah (SPACE)", color_override=(20, 75, 40), border_color_override=(46, 213, 115))
     draw_button(win, font_bold, buttons['actions']['benchmark'], "⚡ Benchmark 30x (B)", color_override=(110, 65, 15), border_color_override=(255, 195, 18))
-    draw_button(win, font_small, buttons['actions']['reset'], "🔄 Reset (C)", color_override=(65, 25, 25), border_color_override=(255, 71, 87))
+    draw_button(win, font_bold, buttons['actions']['reset'], "🔄 Reset (C)", color_override=(75, 25, 25), border_color_override=(255, 71, 87))
 
-    y = 274
-    pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
-    y += 6
-
-    # 5. Status & Metrik Pencarian Terakhir
-    win.blit(font_bold.render("STATUS & HASIL PENCARIAN TERAKHIR:", True, COLOR_TEXT_ACCENT), (x, y))
-    y += 18
-    st_color = COLOR_START if state['status'] == "DITEMUKAN" else (COLOR_GOAL if state['status'] == "TIDAK DITEMUKAN" else COLOR_TEXT_MAIN)
-    win.blit(font_small.render(f"Algoritma Aktif  : {state['algo']}", True, COLOR_TEXT_WARN if 'A*' in state['algo'] else COLOR_TEXT_ACCENT), (x, y))
-    y += 15
-    win.blit(font_small.render(f"Status Pencarian : {state['status']}", True, st_color), (x, y))
-    y += 15
-    win.blit(font_small.render(f"Waktu Eksekusi   : {state['last_time']:.3f} ms", True, COLOR_TEXT_MAIN), (x, y))
-    y += 15
-    win.blit(font_small.render(f"Node Diekspansi  : {state['last_expanded']} node | Jalur: {state['last_path_len']} langkah", True, COLOR_TEXT_MAIN), (x, y))
-
-    y = 362
-    pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
-    y += 6
-
-    # 6. Tabel Benchmark 30x
-    win.blit(font_bold.render("TABEL BENCHMARK (30x PENGULANGAN):", True, COLOR_TEXT_ACCENT), (x, y))
-    y += 18
-
-    header = f"{'Algoritma':<15} {'Waktu (ms)':<12} {'Node':<7} {'Jalur':<7}"
-    win.blit(font_small.render(header, True, COLOR_TEXT_MUTED), (x, y))
-    y += 14
+    y = 296
     pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
     y += 5
 
+    # 5. Riwayat Hasil Visualisasi (History Berdampingan)
+    win.blit(font_bold.render("RIWAYAT HASIL VISUALISASI:", True, COLOR_TEXT_ACCENT), (x, y))
+    y += 16
+
+    header_hist = f"{'Algoritma':<13} {'Status':<11} {'Waktu':<12} {'Node':<7} {'Jalur':<6}"
+    win.blit(font_small.render(header_hist, True, COLOR_TEXT_MUTED), (x, y))
+    y += 13
+    pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
+    y += 4
+
+    algo_order = ['BFS', 'Dijkstra', 'A* Standar', 'A* Tie-Break']
+    for algo in algo_order:
+        short_name = "A* TB" if algo == 'A* Tie-Break' else ("A* Std" if algo == 'A* Standar' else algo)
+        hist = state['visual_history'].get(algo)
+        if hist:
+            time_str = f"{hist['time_ms']:>7.2f} ms"
+            row_line = f"{short_name:<13} {hist['status']:<11} {time_str:<12} {hist['expanded']:<7} {hist['path_len']:<6}"
+            row_color = COLOR_TEXT_WARN if algo == state.get('last_algo_run') else COLOR_TEXT_MAIN
+        else:
+            row_line = f"{short_name:<13} {'-':<11} {'-':<12} {'-':<7} {'-':<6}"
+            row_color = COLOR_TEXT_MUTED
+
+        win.blit(font_small.render(row_line, True, row_color), (x, y))
+        y += 14
+
+    y += 2
+    pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
+    y += 5
+
+    # 6. Tabel Benchmark 30x (Headless)
+    win.blit(font_bold.render("TABEL BENCHMARK (30x PENGULANGAN):", True, COLOR_TEXT_ACCENT), (x, y))
+    y += 16
+
+    header_bm = f"{'Algoritma':<13} {'Status':<11} {'Rata-rata':<12} {'Node':<7} {'Jalur':<6}"
+    win.blit(font_small.render(header_bm, True, COLOR_TEXT_MUTED), (x, y))
+    y += 13
+    pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
+    y += 4
+
     if state['benchmark']:
-        for algo in ['BFS', 'Dijkstra', 'A* Standar', 'A* Tie-Break']:
+        for algo in algo_order:
             row_data = state['benchmark'].get(algo)
             if row_data:
-                short_name = "A* TB (Usulan)" if algo == 'A* Tie-Break' else ("A* Std" if algo == 'A* Standar' else algo)
-                line = f"{short_name:<15} {row_data['avg_ms']:>6.3f} ms   {row_data['expanded']:<7} {row_data['path_len']:<7}"
+                short_name = "A* TB" if algo == 'A* Tie-Break' else ("A* Std" if algo == 'A* Standar' else algo)
+                t_str = f"{row_data['avg_ms']:>7.3f} ms"
+                line = f"{short_name:<13} {row_data['status']:<11} {t_str:<12} {row_data['expanded']:<7} {row_data['path_len']:<6}"
                 row_color = COLOR_TEXT_WARN if algo == 'A* Tie-Break' else COLOR_TEXT_MAIN
                 win.blit(font_small.render(line, True, row_color), (x, y))
-                y += 15
+                y += 14
     else:
-        win.blit(font_small.render("Klik tombol [⚡ Benchmark 30x] untuk membandingkan", True, COLOR_TEXT_MUTED), (x, y))
-        y += 15
+        win.blit(font_small.render("Tekan [⚡ Benchmark 30x] untuk membandingkan", True, COLOR_TEXT_MUTED), (x, y))
+        y += 14
         win.blit(font_small.render("keempat algoritma secara instan tanpa jeda grafis.", True, COLOR_TEXT_MUTED), (x, y))
-        y += 15
+        y += 14
+        y += 14  # spacer to keep heights consistent
+        y += 14
 
-    y = 495
+    y += 2
     pygame.draw.line(win, COLOR_PANEL_BORDER, (x, y), (x + PANEL_WIDTH - 32, y), 1)
-    y += 6
+    y += 5
 
-    # 7. Legenda Warna
-    win.blit(font_bold.render("LEGENDA WARNA:", True, COLOR_TEXT_ACCENT), (x, y))
-    y += 18
+    # 7. Legenda Warna & Panduan
+    win.blit(font_bold.render("LEGENDA WARNA & KONTROL:", True, COLOR_TEXT_ACCENT), (x, y))
+    y += 16
     legends = [
         (COLOR_START, "START", COLOR_GOAL, "GOAL"),
         (COLOR_ROAD, "Jalan", COLOR_WALL, "Obstacle"),
@@ -305,10 +320,12 @@ def draw_panel(win, font, font_bold, font_small, state, buttons):
         if c2:
             pygame.draw.rect(win, c2, (x + 195, y + 2, 10, 10))
             win.blit(font_small.render(l2, True, COLOR_TEXT_MAIN), (x + 211, y))
-        y += 15
+        y += 13
 
-    y += 5
+    y += 3
     win.blit(font_small.render("* Klik/drag kiri: gambar | Klik kanan: hapus", True, COLOR_TEXT_MUTED), (x, y))
+    y += 13
+    win.blit(font_small.render("* SPACE: Visualisasi | B: Benchmark 30x | C: Reset", True, COLOR_TEXT_MUTED), (x, y))
 
 
 def render_all(win, grid, rows, cell_size, offset_x, offset_y, font, font_bold, font_small, state, buttons):
@@ -338,35 +355,35 @@ def main():
 
     buttons = {
         'scenarios': {
-            1: pygame.Rect(bx1, 48, bw, bh),
-            2: pygame.Rect(bx2, 48, bw, bh),
-            3: pygame.Rect(bx1, 71, bw, bh),
-            4: pygame.Rect(bx2, 71, bw, bh),
-            5: pygame.Rect(bx1, 94, bw, bh),
-            6: pygame.Rect(bx2, 94, bw, bh),
+            1: pygame.Rect(bx1, 46, bw, bh),
+            2: pygame.Rect(bx2, 46, bw, bh),
+            3: pygame.Rect(bx1, 69, bw, bh),
+            4: pygame.Rect(bx2, 69, bw, bh),
+            5: pygame.Rect(bx1, 92, bw, bh),
+            6: pygame.Rect(bx2, 92, bw, bh),
         },
         'algo': {
-            'BFS': pygame.Rect(bx1, 142, bw, bh),
-            'Dijkstra': pygame.Rect(bx2, 142, bw, bh),
-            'A* Standar': pygame.Rect(bx1, 165, bw, bh),
-            'A* Tie-Break': pygame.Rect(bx2, 165, bw, bh),
+            'BFS': pygame.Rect(bx1, 140, bw, bh),
+            'Dijkstra': pygame.Rect(bx2, 140, bw, bh),
+            'A* Standar': pygame.Rect(bx1, 163, bw, bh),
+            'A* Tie-Break': pygame.Rect(bx2, 163, bw, bh),
         },
         'mode': {
-            'S': pygame.Rect(bx1, 214, 126, bh),
-            'G': pygame.Rect(bx1 + 133, 214, 126, bh),
-            'O': pygame.Rect(bx1 + 266, 214, 126, bh),
+            'S': pygame.Rect(bx1, 212, 126, bh),
+            'G': pygame.Rect(bx1 + 133, 212, 126, bh),
+            'O': pygame.Rect(bx1 + 266, 212, 128, bh),
         },
         'actions': {
-            'visualize': pygame.Rect(bx1, 242, 180, 24),
-            'benchmark': pygame.Rect(bx1 + 188, 242, 140, 24),
-            'reset': pygame.Rect(bx1 + 334, 242, 58, 24),
+            'visualize': pygame.Rect(bx1, 238, 394, 25),
+            'benchmark': pygame.Rect(bx1, 267, 246, 23),
+            'reset': pygame.Rect(bx1 + 252, 267, 142, 23),
         }
     }
 
     rows = 31
     cell_size = 19
     offset_x = GRID_VIEW_MARGIN + (GRID_AREA_SIZE - rows * cell_size) // 2
-    offset_y = GRID_VIEW_MARGIN + (GRID_AREA_SIZE - rows * cell_size) // 2
+    offset_y = (WINDOW_HEIGHT - rows * cell_size) // 2
 
     current_scenario = 1
     state = {
@@ -375,9 +392,8 @@ def main():
         'status': 'IDLE',
         'rows': rows,
         'scenario': current_scenario,
-        'last_time': 0.0,
-        'last_expanded': 0,
-        'last_path_len': 0,
+        'last_algo_run': None,
+        'visual_history': {},
         'benchmark': {},
     }
 
@@ -407,7 +423,7 @@ def main():
         else: cell_size = GRID_AREA_SIZE // rows
 
         offset_x = GRID_VIEW_MARGIN + (GRID_AREA_SIZE - rows * cell_size) // 2
-        offset_y = GRID_VIEW_MARGIN + (GRID_AREA_SIZE - rows * cell_size) // 2
+        offset_y = (WINDOW_HEIGHT - rows * cell_size) // 2
 
         grid = make_grid(rows, cell_size, offset_x, offset_y)
         walls, s_pos, g_pos = apply_scenario(sc_num, rows)
@@ -425,10 +441,9 @@ def main():
         state['rows'] = rows
         state['scenario'] = current_scenario
         state['status'] = 'IDLE'
+        state['last_algo_run'] = None
+        state['visual_history'].clear()
         state['benchmark'].clear()
-        state['last_time'] = 0.0
-        state['last_expanded'] = 0
-        state['last_path_len'] = 0
 
     def start_visualization():
         if not (start and end):
@@ -438,23 +453,29 @@ def main():
             for spot in row:
                 spot.update_neighbors(grid)
 
+        algo_name = state['algo']
         state['status'] = 'MENCARI JALUR...'
         draw_callback = lambda: render_all(win, grid, rows, cell_size, offset_x, offset_y, font, font_bold, font_small, state, buttons)
 
         speed = 240 if rows >= 51 else 120
-        if state['algo'] == 'BFS':
+        if algo_name == 'BFS':
             found, el_time, exp_cnt, plen = run_bfs(draw_callback, grid, start, end, clock, speed)
-        elif state['algo'] == 'Dijkstra':
+        elif algo_name == 'Dijkstra':
             found, el_time, exp_cnt, plen = run_dijkstra(draw_callback, grid, start, end, clock, speed)
-        elif state['algo'] == 'A* Standar':
+        elif algo_name == 'A* Standar':
             found, el_time, exp_cnt, plen = run_astar_standard(draw_callback, grid, start, end, clock, speed)
-        elif state['algo'] == 'A* Tie-Break':
+        elif algo_name == 'A* Tie-Break':
             found, el_time, exp_cnt, plen = run_astar_tiebreak(draw_callback, grid, start, end, clock, speed)
 
-        state['last_time'] = el_time
-        state['last_expanded'] = exp_cnt
-        state['last_path_len'] = plen
-        state['status'] = "DITEMUKAN" if found else "TIDAK DITEMUKAN"
+        status_str = "DITEMUKAN" if found else "TIDAK ADA"
+        state['last_algo_run'] = algo_name
+        state['visual_history'][algo_name] = {
+            'status': status_str,
+            'time_ms': el_time,
+            'expanded': exp_cnt,
+            'path_len': plen
+        }
+        state['status'] = status_str
 
     def run_benchmark():
         if not (start and end):
@@ -505,6 +526,8 @@ def main():
                 elif buttons['actions']['reset'].collidepoint(pos):
                     clear_search_visuals(grid, start, end)
                     state['status'] = 'IDLE'
+                    state['last_algo_run'] = None
+                    state['visual_history'].clear()
                     state['benchmark'].clear()
 
             # Input Mouse pada Area Grid
@@ -521,6 +544,7 @@ def main():
                                     start.reset()
                                 start = spot
                                 start.make_start()
+                                state['visual_history'].clear()
                                 state['benchmark'].clear()
                         elif state['mode'] == 'G':
                             if not spot.is_barrier() and spot != start:
@@ -528,10 +552,12 @@ def main():
                                     end.reset()
                                 end = spot
                                 end.make_goal()
+                                state['visual_history'].clear()
                                 state['benchmark'].clear()
                         elif state['mode'] == 'O':
                             if spot != start and spot != end:
                                 spot.make_barrier()
+                                state['visual_history'].clear()
                                 state['benchmark'].clear()
 
             elif pygame.mouse.get_pressed()[2]:
@@ -546,6 +572,7 @@ def main():
                         elif spot == end:
                             end = None
                         spot.reset()
+                        state['visual_history'].clear()
                         state['benchmark'].clear()
 
             # Dukungan Keyboard Hotkeys
@@ -562,6 +589,8 @@ def main():
                 elif event.key == pygame.K_c:
                     clear_search_visuals(grid, start, end)
                     state['status'] = 'IDLE'
+                    state['last_algo_run'] = None
+                    state['visual_history'].clear()
                     state['benchmark'].clear()
 
                 elif event.key == pygame.K_F1: load_scenario(1)
